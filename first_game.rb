@@ -1,7 +1,5 @@
 require 'gosu'
 
-
-
 module ZOrder #don't know what this does. Was in tutorial. Mess around here later
   BACKGROUND, PLAYER, UI = *0..3
 end
