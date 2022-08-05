@@ -3,7 +3,6 @@
 ## Basic Development
 ### Add
 
-- player projectiles
 - enemy targets (generate into array)
   - add targets moving closer and game over condition when collide with player or bottom of screen
   - increase speed of target generation
@@ -12,7 +11,8 @@
 
 ### Long Term
 - different levels
-- additional lives
+- additional lives?
+- random drops from enemies. grant buffs (or currency) when collected
 
 ### Misc features
 
