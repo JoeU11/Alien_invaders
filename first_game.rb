@@ -1,9 +1,5 @@
 require 'gosu'
 
-# module ZOrder #don't know what this does. Was in tutorial. Mess around here later
-#   BACKGROUND, PLAYER, UI = *0..3
-# end
-
 class Player
   attr_reader :x, :y
 
@@ -36,7 +32,7 @@ class Explosion
     @current_frame = 0
   end
 
-  def draw #need to figure out how to remove from array after last animation frame.
+  def draw 
     img = @anim[Gosu.milliseconds / 100 % @anim.size]
     img.draw(@x - img.width / 2.0, @y - img.height / 2.0, 1)
     @current_frame += 1
