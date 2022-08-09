@@ -28,6 +28,25 @@ class Player
   end
 end
 
+class Explosion
+  def initialize(anim, laser_x, laser_y)
+    @anim = anim
+    @x = laser_x - 15
+    @y = laser_y - 10
+    @current_frame = 0
+  end
+
+  def draw #need to figure out how to remove from array after last animation frame.
+    img = @anim[Gosu.milliseconds / 100 % @anim.size]
+    img.draw(@x - img.width / 2.0, @y - img.height / 2.0, 1)
+    @current_frame += 1
+  end
+
+  def done? 
+    @done ||= @current_frame == @anim.size
+  end
+end
+
 class Laser
   attr_reader :y, :x
   def initialize(player_y, player_x)
@@ -83,6 +102,8 @@ class Invaders < Gosu::Window
     @background_image = Gosu::Image.new("media/space.png", :tileable => true)
     @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
     @score_border = Gosu::Image.new("media/border.png", :tileable => false)
+    @explosion_animation = Gosu::Image.load_tiles("media/explosion.png", 60, 50)
+    @explosions = []
 
     @aliens = []
     @player = Player.new
@@ -122,12 +143,13 @@ class Invaders < Gosu::Window
     end
     while @laser_counter < @lasers.length
       if @lasers[@laser_counter].hit_target(@aliens)
+        @explosions.push(Explosion.new(@explosion_animation, @lasers[@laser_counter].x, @lasers[@laser_counter].y))
         @lasers.delete_at(@laser_counter)
         @laser_counter -= 1
-        # Add cue to draw explosion animation here
       end
       @laser_counter += 1
     end
+    @explosions.reject!(&:done?)
   end
 
   def draw
@@ -137,6 +159,7 @@ class Invaders < Gosu::Window
     @font.draw_text("Score: \n\n\n Level: ", 1000, 70, 1, scale_x = 1, scale_y = 1, color = 0xff_ffffff, mode = :default)
     @score_border.draw(980, 40, 1,)
     @aliens.each {|alien| alien.draw}
+    @explosions.each {|explosion| explosion.draw}
   end
 
   def button_down(id) 
