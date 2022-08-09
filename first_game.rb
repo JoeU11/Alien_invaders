@@ -1,94 +1,8 @@
 require 'gosu'
-
-class Player
-  attr_reader :x, :y
-
-  def initialize
-    @image = Gosu::Image.new("media/starfighter.bmp")
-    @vel_x = @vel_y = @angle = 0.0 
-    @y = 670
-    @x = 500
-    @score = 0
-  end
-
-  def move_left
-    @x -= 7
-  end
-
-  def move_right
-    @x += 7
-  end
-
-  def draw
-    @image.draw_rot(@x, @y, 1, @angle) 
-  end
-end
-
-class Explosion
-  def initialize(anim, laser_x, laser_y)
-    @anim = anim
-    @x = laser_x - 15
-    @y = laser_y - 10
-    @current_frame = 0
-  end
-
-  def draw 
-    img = @anim[Gosu.milliseconds / 100 % @anim.size]
-    img.draw(@x - img.width / 2.0, @y - img.height / 2.0, 1)
-    @current_frame += 1
-  end
-
-  def done? 
-    @done ||= @current_frame == @anim.size
-  end
-end
-
-class Laser
-  attr_reader :y, :x
-  def initialize(player_y, player_x)
-    @image = Gosu::Image.new("media/laser.png")
-    @y = player_y
-    @x = player_x
-  end
-
-  def draw
-    @image.draw_rot(@x, @y, 1, 0.0)
-  end
-
-  def move
-    @y -= 10 
-  end
-
-  def hit_target(aliens) 
-    hit = false
-    index = 0
-    while index < aliens.length do
-      if Gosu.distance(@x, @y, aliens[index].x, aliens[index].y) < 25
-        aliens.delete_at(index)
-        hit = true
-        index -= 1
-      end
-      index += 1
-    end
-    return hit
-  end
-end
-
-class Alien
-  attr_reader :x, :y
-
-  def initialize(x, y)
-    @image = Gosu::Image.new("media/invader_1.png") 
-    @x = x
-    @y = y
-  end
-
-  def draw
-    @image.draw_rot(@x, @y, 1, 0.0)
-  end
-end
-
-
+require_relative 'player.rb'
+require_relative 'explosion.rb'
+require_relative 'laser.rb'
+require_relative 'alien.rb'
 
 class Invaders < Gosu::Window
   def initialize
@@ -146,6 +60,7 @@ class Invaders < Gosu::Window
       @laser_counter += 1
     end
     @explosions.reject!(&:done?)
+    @aliens.each { |alien| alien.update}
   end
 
   def draw
