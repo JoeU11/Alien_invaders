@@ -23,10 +23,13 @@ class Invaders < Gosu::Window
     @alien_x = 900
     @alien_y = 50
     @game_over = false
+    @level = 1
+    @level_complete = false
   end
 
   def update 
     @laser_counter = 0
+
     if Gosu.button_down? Gosu::KB_LEFT or Gosu::button_down? Gosu::GP_LEFT
       if @player.x > 25
         @player.move_left
@@ -43,15 +46,17 @@ class Invaders < Gosu::Window
         @cooldown = 10
       end
     end
+
     @cooldown -= 1
     @lasers.each {|laser| laser.move}
     @lasers.reject! {|laser| laser.y == 0}
 
     while @alien_count < 15 #Add row variable 
-      @aliens.push(Alien.new(@alien_x, @alien_y))
+      @aliens.push(Alien.new(@alien_x, @alien_y, @level))
       @alien_x -= 60
       @alien_count += 1
     end
+
     while @laser_counter < @lasers.length
       if @lasers[@laser_counter].hit_target?(@aliens)
         @explosions.push(Explosion.new(@explosion_animation, @lasers[@laser_counter].x, @lasers[@laser_counter].y))
@@ -61,6 +66,7 @@ class Invaders < Gosu::Window
       end
       @laser_counter += 1
     end
+
     @explosions.reject!(&:done?)
     @aliens.each do |alien|
       alien.update
@@ -68,19 +74,31 @@ class Invaders < Gosu::Window
         @game_over = true
       end
     end 
+    if @aliens.length == 0
+      @level_complete = true
+      if Gosu.button_down? Gosu::KbSpace
+        @level += 1
+        @level_complete = false
+        @alien_count = 0
+        @alien_x = 900
+      end
+    end
   end
 
   def draw
     @background_image.draw(0, 0, 0, 1.9, 1.5)
-    if @game_over == false
+    if !@game_over && !@level_complete
       @player.draw
       @lasers.each {|laser| laser.draw}
-      @font.draw_text("Score: #{@player.score.to_s}\n\n\n Level: ", 1000, 70, 1, scale_x = 1, scale_y = 1, color = 0xff_ffffff, mode = :default)
+      @font.draw_text("Score: #{@player.score.to_s}\n\n\n Level: #{@level}", 1000, 70, 1, scale_x = 1, scale_y = 1, color = 0xff_ffffff, mode = :default)
       @score_border.draw(980, 40, 1,)
       @aliens.each {|alien| alien.draw}
       @explosions.each {|explosion| explosion.draw}
+    elsif @level_complete
+      @font.draw_text("Level complete", 380, 240, 1, scale_x = 4, scale_y = 4, color = 0xff_ffffff, mode = :default)
+      @font.draw_text("Press Space to continue", 413, 340, 1, scale_x = 2, scale_y = 2, color = 0xff_ffffff, mode = :default)
     else
-      @font.draw_text("GAME OVER\nScore: #{@player.score.to_s}\nLevel: ", 400, 230, 1, scale_x = 4, scale_y = 4, color = 0xff_ffffff, mode = :default)
+      @font.draw_text("GAME OVER\nScore: #{@player.score.to_s}\nLevel: #{@level}", 400, 230, 1, scale_x = 4, scale_y = 4, color = 0xff_ffffff, mode = :default)
     end
   end
 
