@@ -20,4 +20,12 @@ class Alien
       @timer = 0
     end
   end
+
+  def hit_target?(player_x, player_y)
+    hit = false
+    if Gosu.distance(@x, @y, player_x, player_y) < 30 || @y > 700
+      hit = true
+    end
+    return hit
+  end
 end

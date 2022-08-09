@@ -12,6 +12,7 @@
   - add targets moving closer and game over condition when collide with player or bottom of screen
   - increase speed of target generation
 - score tracking and display
+- sound
 
 ### Long Term
 - different levels

@@ -14,7 +14,7 @@ class Laser
     @y -= 10 
   end
 
-  def hit_target(aliens) 
+  def hit_target?(aliens) 
     hit = false
     index = 0
     while index < aliens.length do
