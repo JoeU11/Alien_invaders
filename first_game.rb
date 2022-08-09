@@ -56,6 +56,7 @@ class Invaders < Gosu::Window
         @explosions.push(Explosion.new(@explosion_animation, @lasers[@laser_counter].x, @lasers[@laser_counter].y))
         @lasers.delete_at(@laser_counter)
         @laser_counter -= 1
+        @player.add_score
       end
       @laser_counter += 1
     end
@@ -67,7 +68,7 @@ class Invaders < Gosu::Window
     @player.draw
     @background_image.draw(0, 0, 0, 1.9, 1.5)
     @lasers.each {|laser| laser.draw}
-    @font.draw_text("Score: \n\n\n Level: ", 1000, 70, 1, scale_x = 1, scale_y = 1, color = 0xff_ffffff, mode = :default)
+    @font.draw_text("Score: #{@player.score.to_s}\n\n\n Level: ", 1000, 70, 1, scale_x = 1, scale_y = 1, color = 0xff_ffffff, mode = :default)
     @score_border.draw(980, 40, 1,)
     @aliens.each {|alien| alien.draw}
     @explosions.each {|explosion| explosion.draw}

@@ -1,5 +1,5 @@
 class Player
-  attr_reader :x, :y
+  attr_reader :x, :y, :score
 
   def initialize
     @image = Gosu::Image.new("media/starfighter.bmp")
@@ -19,5 +19,9 @@ class Player
 
   def draw
     @image.draw_rot(@x, @y, 1, @angle) 
+  end
+
+  def add_score
+    @score += 10
   end
 end
