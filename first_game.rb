@@ -7,7 +7,7 @@ require_relative 'alien.rb'
 class Invaders < Gosu::Window
   def initialize
     super 1220, 720 
-    self.caption = "Working Title"
+    self.caption = "Alien Invaders"
 
     @background_image = Gosu::Image.new("media/space.png", :tileable => true)
     @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
