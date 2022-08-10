@@ -3,6 +3,7 @@ require_relative 'player.rb'
 require_relative 'explosion.rb'
 require_relative 'laser.rb'
 require_relative 'alien.rb'
+require_relative 'levels.rb'
 
 class Invaders < Gosu::Window
   def initialize
@@ -14,7 +15,6 @@ class Invaders < Gosu::Window
     @score_border = Gosu::Image.new("media/border.png", :tileable => false)
     @explosion_animation = Gosu::Image.load_tiles("media/explosion.png", 60, 50)
     @explosions = []
-
     @aliens = []
     @player = Player.new
     @lasers = []
@@ -25,6 +25,7 @@ class Invaders < Gosu::Window
     @game_over = false
     @level = 1
     @level_complete = false
+    @total_aliens = 15
   end
 
   def update 
@@ -51,10 +52,12 @@ class Invaders < Gosu::Window
     @lasers.each {|laser| laser.move}
     @lasers.reject! {|laser| laser.y == 0}
 
-    while @alien_count < 15 #Add row variable 
-      @aliens.push(Alien.new(@alien_x, @alien_y, @level))
-      @alien_x -= 60
+    while @alien_count < @total_aliens #Add row variable. Restate as method to ____ class. Pass in level, generate unique deployment. 
       @alien_count += 1
+      @aliens.push(Alien.new(@alien_x, @alien_y, @level))
+      temp = update_alien_position(@alien_x, @alien_y, @level, @alien_count)
+      @alien_x = temp[0]
+      @alien_y = temp[1] #TODO replace @alien_x, @alien_y with @alien_position array
     end
 
     while @laser_counter < @lasers.length
@@ -76,11 +79,16 @@ class Invaders < Gosu::Window
     end 
     if @aliens.length == 0
       @level_complete = true
-      if Gosu.button_down? Gosu::KbSpace
-        @level += 1
-        @level_complete = false
-        @alien_count = 0
-        @alien_x = 900
+      @cooldown += 2
+      if Gosu.button_down? Gosu::KbSpace 
+        if @cooldown > 50
+          @level += 1
+          @level_complete = false
+          @alien_count = 0
+          @alien_x = 900
+          @cooldown = 5
+          @total_aliens += 5
+        end
       end
     end
   end
@@ -97,8 +105,11 @@ class Invaders < Gosu::Window
     elsif @level_complete
       @font.draw_text("Level complete", 380, 240, 1, scale_x = 4, scale_y = 4, color = 0xff_ffffff, mode = :default)
       @font.draw_text("Press Space to continue", 413, 340, 1, scale_x = 2, scale_y = 2, color = 0xff_ffffff, mode = :default)
+      @alien_x = 900
+      @alien_y = 0
     else
-      @font.draw_text("GAME OVER\nScore: #{@player.score.to_s}\nLevel: #{@level}", 400, 230, 1, scale_x = 4, scale_y = 4, color = 0xff_ffffff, mode = :default)
+      @font.draw_text("GAME OVER", 400, 230, 1, scale_x = 4, scale_y = 4, color = 0xff_ffffff, mode = :default)
+      @font.draw_text("Score: #{@player.score.to_s}\nLevel: #{@level}", 540, 330, 1, scale_x = 2, scale_y = 2, color = 0xff_ffffff, mode = :default)
     end
   end
 
