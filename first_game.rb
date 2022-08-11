@@ -21,71 +21,73 @@ class Invaders < Gosu::Window
     @cooldown = 0
     @alien_count = 0
     @game_over = false
-    @level = 2
+    @level = 5
     @level_complete = false
     @total_aliens = 15
     @total_aliens = add_targets(@level) # added for individual level testing. Remove to make multiple levels playable
   end
 
   def update 
-    @laser_counter = 0
+    if !@game_over
+      @laser_counter = 0
 
-    if Gosu.button_down? Gosu::KB_LEFT or Gosu::button_down? Gosu::GP_LEFT
-      if @player.x > 25
-        @player.move_left
+      if Gosu.button_down? Gosu::KB_LEFT or Gosu::button_down? Gosu::GP_LEFT
+        if @player.x > 25
+          @player.move_left
+        end
       end
-    end
-    if Gosu.button_down? Gosu::KB_RIGHT or Gosu::button_down? Gosu::GP_RIGHT
-      if @player.x < 940
-        @player.move_right
+      if Gosu.button_down? Gosu::KB_RIGHT or Gosu::button_down? Gosu::GP_RIGHT
+        if @player.x < 940
+          @player.move_right
+        end
       end
-    end
-    if Gosu.button_down? Gosu::KbSpace
-      if @cooldown <= 0
-        @lasers << Laser.new(@player.y, @player.x)
-        @cooldown = 10
+      if Gosu.button_down? Gosu::KbSpace
+        if @cooldown <= 0
+          @lasers << Laser.new(@player.y, @player.x)
+          @cooldown = 10
+        end
       end
-    end
 
-    @cooldown -= 1
-    @lasers.each {|laser| laser.move}
-    @lasers.reject! {|laser| laser.y == 0}
+      @cooldown -= 1
+      @lasers.each {|laser| laser.move}
+      @lasers.reject! {|laser| laser.y == 0}
 
-    while @alien_count < @total_aliens 
-      @alien_count += 1
-      temp = update_alien_position(@alien_x, @alien_y, @level, @alien_count)
-      @alien_x = temp[0]
-      @alien_y = temp[1]
-      @aliens.push(Alien.new(@alien_x, @alien_y, @level)) 
-    end
-
-    while @laser_counter < @lasers.length
-      if @lasers[@laser_counter].hit_target?(@aliens)
-        @explosions.push(Explosion.new(@explosion_animation, @lasers[@laser_counter].x, @lasers[@laser_counter].y))
-        @lasers.delete_at(@laser_counter)
-        @laser_counter -= 1
-        @player.add_score
+      while @alien_count < @total_aliens 
+        @alien_count += 1
+        temp = update_alien_position(@alien_x, @alien_y, @level, @alien_count)
+        @alien_x = temp[0]
+        @alien_y = temp[1]
+        @aliens.push(Alien.new(@alien_x, @alien_y, @level)) 
       end
-      @laser_counter += 1
-    end
 
-    @explosions.reject!(&:done?)
-    @aliens.each do |alien|
-      alien.update
-      if alien.hit_target?(@player.x, @player.y)
-        @game_over = true
+      while @laser_counter < @lasers.length
+        if @lasers[@laser_counter].hit_target?(@aliens)
+          @explosions.push(Explosion.new(@explosion_animation, @lasers[@laser_counter].x, @lasers[@laser_counter].y))
+          @lasers.delete_at(@laser_counter)
+          @laser_counter -= 1
+          @player.add_score
+        end
+        @laser_counter += 1
       end
-    end 
-    if @aliens.length == 0 
-      @level_complete = true
-      @cooldown += 2
-      if Gosu.button_down? Gosu::KbSpace 
-        if @cooldown > 50
-          @level += 1
-          @level_complete = false
-          @alien_count = 0 
-          @cooldown = 5
-          # @total_aliens = add_targets(@level) # commented out for purposes of individual level testing
+
+      @explosions.reject!(&:done?)
+      @aliens.each do |alien|
+        alien.update
+        if alien.hit_target?(@player.x, @player.y)
+          @game_over = true
+        end
+      end 
+      if @aliens.length == 0 
+        @level_complete = true
+        @cooldown += 2
+        if Gosu.button_down? Gosu::KbSpace 
+          if @cooldown > 50
+            @level += 1
+            @level_complete = false
+            @alien_count = 0 
+            @cooldown = 5
+            # @total_aliens = add_targets(@level) # commented out for purposes of individual level testing
+          end
         end
       end
     end
