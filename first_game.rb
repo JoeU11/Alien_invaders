@@ -20,12 +20,11 @@ class Invaders < Gosu::Window
     @lasers = []
     @cooldown = 0
     @alien_count = 0
-    @alien_x = 900
-    @alien_y = 50
     @game_over = false
-    @level = 1
+    @level = 2
     @level_complete = false
     @total_aliens = 15
+    @total_aliens = add_targets(@level) # added for individual level testing. Remove to make multiple levels playable
   end
 
   def update 
@@ -52,12 +51,12 @@ class Invaders < Gosu::Window
     @lasers.each {|laser| laser.move}
     @lasers.reject! {|laser| laser.y == 0}
 
-    while @alien_count < @total_aliens #Add row variable. Restate as method to ____ class. Pass in level, generate unique deployment. 
+    while @alien_count < @total_aliens 
       @alien_count += 1
-      @aliens.push(Alien.new(@alien_x, @alien_y, @level))
       temp = update_alien_position(@alien_x, @alien_y, @level, @alien_count)
       @alien_x = temp[0]
-      @alien_y = temp[1] #TODO replace @alien_x, @alien_y with @alien_position array
+      @alien_y = temp[1]
+      @aliens.push(Alien.new(@alien_x, @alien_y, @level)) 
     end
 
     while @laser_counter < @lasers.length
@@ -77,17 +76,16 @@ class Invaders < Gosu::Window
         @game_over = true
       end
     end 
-    if @aliens.length == 0
+    if @aliens.length == 0 
       @level_complete = true
       @cooldown += 2
       if Gosu.button_down? Gosu::KbSpace 
         if @cooldown > 50
           @level += 1
           @level_complete = false
-          @alien_count = 0
-          @alien_x = 900
+          @alien_count = 0 
           @cooldown = 5
-          @total_aliens += 5
+          # @total_aliens = add_targets(@level) # commented out for purposes of individual level testing
         end
       end
     end
