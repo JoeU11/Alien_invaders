@@ -59,9 +59,32 @@ def add_targets(level)
   if level == 2
     alien_count = 35
   elsif level == 3
-    alien_count = 40
+    alien_count = 27
   else 
     alien_count = 35
   end
   return alien_count
 end
+
+
+##### Position Guide ######
+/
+default y = 50, new line -= 45
+x values (right to left)
+1 = 900
+2 = 840
+3 = 780
+4 = 720
+5 = 660
+6 = 600
+7 = 540
+8 = 480
+9 = 420
+10 = 360
+11 = 300
+12 = 240
+13 = 180
+14 = 120
+15 = 60
+
+/
