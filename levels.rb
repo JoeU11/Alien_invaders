@@ -104,12 +104,207 @@ def update_alien_position(x, y, level, count)
       x -= 60
     end
     return x, y
-  # elsif level == 6
-  # elsif level == 7
-  # elsif level == 8
-  # elsif level == 9
-  # elsif level == 10
+  elsif level == 6
+    if count == 1
+      x = 780
+      y = 50
+    elsif count == 2
+      x = 600
+    elsif count == 7
+      x = 780
+      y -= 45
+    elsif count == 8
+      x = 600
+    elsif count == 13
+      x = 780
+      y -= 45
+    elsif count == 14
+      x = 840
+    elsif count == 17
+      x = 600
+    elsif count == 22
+      x = 840
+      y -= 45
+    elsif count == 25
+      x = 540
+    elsif count == 28
+      x = 480
+      y -= 45
+    elsif count == 29
+      x = 180
+      y -= 90
+    elsif count == 32
+      x = 180
+      y -= 45
+    elsif count == 35
+      x = 180
+      y -= 45
+    else
+      x -= 60
+    end
+    return x, y
+  elsif level == 7
+    if count == 1
+      x = 780
+      y = 50
+    elsif count == 2
+      x = 180
+    elsif count == 3
+      x = 840
+      y -= 45
+    elsif count == 6
+      x = 240
+    elsif count == 9
+      x = 900
+      y -= 45
+    elsif count == 14
+      x = 300
+    elsif count == 19
+      x = 480
+      y -= 120
+    elsif count == 20
+      x = 540
+      y -= 45
+    elsif count == 23
+      x = 600
+      y -= 45
+    elsif count == 28
+      x = 660
+      y -= 45
+    else
+      x -= 60
+    end
+    return x, y
+  elsif level == 8
+    if count == 1
+      x = 840
+      y = 0
+    elsif count == 5
+      x = 300
+    elsif count == 9
+      x = 840
+      y -= 45
+    elsif count == 13
+      x = 300
+    elsif count == 17
+      x = 840
+      y -= 45
+    elsif count == 18
+      x = 660
+    elsif count == 19
+      x = 300
+    elsif count == 20
+      x = 120
+    elsif count == 21
+      x = 540
+      y -= 135
+    elsif count == 24
+      x = 600
+      y -= 45
+    elsif count == 25
+      x = 360
+    elsif count == 26
+      x = 600
+      y -= 45
+    elsif count == 27
+      x = 360
+    else
+      x -= 60
+    end
+    return x, y
+  elsif level == 9   
+    if count == 1
+      x = 840
+      y = 0
+    elsif count == 3
+      x = 180
+    elsif count == 5
+      x = 780
+      y -= 45
+    elsif count == 7
+      x = 240
+    elsif count == 9
+      x = 720
+      y -= 45
+    elsif count == 11
+      x = 300
+    elsif count == 13
+      x = 660
+      y -= 45
+    elsif count == 15
+      x = 360
+    elsif count >= 16 && count <= 24
+      x = 480
+      y -= 45
+    elsif count == 25
+      x = 840
+      y -= 90
+    elsif count == 29
+      x = 240
+    else
+      x -= 60
+    end
+    return x, y
+  elsif level == 10
+    if count == 1
+      x = 480
+      y = 50
+    elsif count == 2
+      x = 540
+      y -= 45
+    elsif count == 3
+      x = 420
+    elsif count == 4
+      x = 600
+      y -= 45
+    elsif count == 5
+      x = 360
+    elsif count == 6
+      x = 660
+      y -= 45
+    elsif count == 7
+      x = 300
+    elsif count == 8
+      x = 720
+      y -= 45
+    elsif count == 9
+      x = 240
+    elsif count == 10
+      x = 720
+      y -= 45
+    elsif count == 11
+      x = 240
+    elsif count == 12
+      x = 720
+      y -= 45
+    elsif count == 13
+      x = 240
+    elsif count == 14
+      x = 660
+      y -= 45
+    elsif count == 15
+      x = 300
+    elsif count == 16
+      x = 600
+      y -= 45
+    elsif count == 17 ##good until here. maybe go flat next?
+      x = 360
+    elsif count == 18
+      x = 540
+    elsif count == 19
+      x = 420
+    elsif count == 20
+      x = 480
+      y += 45
+    else
+      x -= 60
+    end
+    return x, y
   else #delete this after all levels are complete
+    if count == 1
+      x = 900
+      y = 0
+    end
     x -= 60 
     if count % 15 == 0 ### doesn't apply for first lvl
       x = x + 900
@@ -129,8 +324,18 @@ def add_targets(level)
     total = 39
   elsif level == 5
     total = 36
+  elsif level == 6
+    total = 37
+  elsif level == 7
+    total = 34
+  elsif level == 8
+    total = 27
+  elsif level == 9
+    total = 32
+  elsif level == 10
+    total = 20
   else 
-    total = 35
+    total = 100
   end
   return total
 end

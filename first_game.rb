@@ -21,10 +21,10 @@ class Invaders < Gosu::Window
     @cooldown = 0
     @alien_count = 0
     @game_over = false
-    @level = 5
+    @level = 1
     @level_complete = false
     @total_aliens = 15
-    @total_aliens = add_targets(@level) # added for individual level testing. Remove to make multiple levels playable
+    # @total_aliens = add_targets(@level) # added in for individual level testing
   end
 
   def update 
@@ -86,7 +86,7 @@ class Invaders < Gosu::Window
             @level_complete = false
             @alien_count = 0 
             @cooldown = 5
-            # @total_aliens = add_targets(@level) # commented out for purposes of individual level testing
+            @total_aliens = add_targets(@level) # comment out to test individual levels
           end
         end
       end
