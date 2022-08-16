@@ -18,17 +18,25 @@ class Invaders < Gosu::Window
     @aliens = []
     @player = Player.new
     @lasers = []
-    @cooldown = 0
+    @cooldown = 20
     @alien_count = 0
     @game_over = false
     @level = 1
     @level_complete = false
     @total_aliens = 15
+    @game_start = true
     # @total_aliens = add_targets(@level) # added in for individual level testing
   end
 
   def update 
-    if !@game_over
+    if @game_start
+      if @cooldown > 0
+        @cooldown -= 1
+      elsif Gosu.button_down? Gosu::KbSpace 
+        @game_start = false
+        @cooldown = 10
+      end
+    elsif !@game_over
       @laser_counter = 0
 
       if Gosu.button_down? Gosu::KB_LEFT or Gosu::button_down? Gosu::GP_LEFT
@@ -75,6 +83,7 @@ class Invaders < Gosu::Window
         alien.update
         if alien.hit_target?(@player.x, @player.y)
           @game_over = true
+          @cooldown = 50
         end
       end 
       if @aliens.length == 0 
@@ -90,12 +99,29 @@ class Invaders < Gosu::Window
           end
         end
       end
+    else
+      if @cooldown > 0
+        @cooldown -= 1
+      elsif Gosu.button_down? Gosu::KbSpace 
+        @game_start = true
+        @game_over = false
+        p 1
+        @cooldown = 15
+        @level = 1
+        @aliens = []
+        @total_aliens = 15
+        @alien_count = 0
+        @level_complete = false
+      end
     end
   end
 
   def draw
     @background_image.draw(0, 0, 0, 1.9, 1.5)
-    if !@game_over && !@level_complete
+    if @game_start
+      @font.draw_text("Alien Invaders", 400, 230, 1, scale_x = 4, scale_y = 4, color = 0xff_ffffff, mode = :default)
+      @font.draw_text("Keys\nMove: Left/Right Arrows\nShoot: Space Bar", 400, 330, 1, scale_x = 2, scale_y = 2, color = 0xff_ffffff, mode = :default)
+    elsif !@game_over && !@level_complete
       @player.draw
       @lasers.each {|laser| laser.draw}
       @font.draw_text("Score: #{@player.score.to_s}\n\n\n Level: #{@level}", 1000, 70, 1, scale_x = 1, scale_y = 1, color = 0xff_ffffff, mode = :default)
@@ -110,6 +136,7 @@ class Invaders < Gosu::Window
     else
       @font.draw_text("GAME OVER", 400, 230, 1, scale_x = 4, scale_y = 4, color = 0xff_ffffff, mode = :default)
       @font.draw_text("Score: #{@player.score.to_s}\nLevel: #{@level}", 540, 330, 1, scale_x = 2, scale_y = 2, color = 0xff_ffffff, mode = :default)
+      @font.draw_text("Press Space to play again", 400, 530, 1, scale_x = 2, scale_y = 2, color = 0xff_ffffff, mode = :default)
     end
   end
 
