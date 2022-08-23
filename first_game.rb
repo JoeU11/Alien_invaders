@@ -120,7 +120,7 @@ class Invaders < Gosu::Window
     @background_image.draw(0, 0, 0, 1.9, 1.5)
     if @game_start
       @font.draw_text("Alien Invaders", 400, 230, 1, scale_x = 4, scale_y = 4, color = 0xff_ffffff, mode = :default)
-      @font.draw_text("Keys\nMove: Left/Right Arrows\nShoot: Space Bar", 400, 330, 1, scale_x = 2, scale_y = 2, color = 0xff_ffffff, mode = :default)
+      @font.draw_text("Keys:\nMove: Left/Right Arrows\nShoot: Space Bar\n\nPress Space to start", 400, 330, 1, scale_x = 2, scale_y = 2, color = 0xff_ffffff, mode = :default)
     elsif !@game_over && !@level_complete
       @player.draw
       @lasers.each {|laser| laser.draw}

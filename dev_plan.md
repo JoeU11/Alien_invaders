@@ -3,10 +3,9 @@
 ## Basic Development
 
 ### Next steps
-1. Add "play again?" option on game over screen
 
 ### To Add
-- sound
+- soundtrack
 
 ### Long Term
 - additional lives?
